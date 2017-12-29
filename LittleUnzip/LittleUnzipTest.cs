@@ -22,34 +22,30 @@ namespace LittleUnzip
         /// <summary>Select the source ZIP file</summary>
         private void buttonZipFile_Click(object sender, EventArgs e)
         {
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.RestoreDirectory = true;
-            saveFileDialog.Filter = "Zip (*.zip)|*.zip";
-            saveFileDialog.DefaultExt = ".zip";
-            saveFileDialog.OverwritePrompt = false;
-            if (DialogResult.OK == saveFileDialog.ShowDialog())
+            using (OpenFileDialog openFileDialog = new OpenFileDialog())
             {
-                this.textBoxZipFile.Text = saveFileDialog.FileName;
-                this.textBoxOutputPath.Text = Path.GetDirectoryName(this.textBoxZipFile.Text);
+                openFileDialog.RestoreDirectory = true;
+                openFileDialog.Filter = "Zip (*.zip)|*.zip";
+                openFileDialog.DefaultExt = ".zip";
+
+                if (DialogResult.OK == openFileDialog.ShowDialog())
+                {
+                    this.textBoxZipFile.Text = openFileDialog.FileName;
+                    this.textBoxOutputPath.Text = Path.Combine(Path.GetDirectoryName(openFileDialog.FileName),
+                                                               Path.GetFileNameWithoutExtension(openFileDialog.FileName));
+                }
             }
         }
 
         /// <summary>Select the destination directory for decompress</summary>
         private void buttonOutputPath_Click(object sender, System.EventArgs e)
         {
-            try
+            using (FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog())
             {
-                using (FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog())
-                {
-                    if (Directory.Exists(Path.GetDirectoryName(this.textBoxZipFile.Text)))
-                        folderBrowserDialog.SelectedPath = Path.GetDirectoryName(this.textBoxZipFile.Text);
-                    if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
-                        this.textBoxOutputPath.Text = folderBrowserDialog.SelectedPath;
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message + "\r\nEn frmMain.buttonInPath_Click\r\nCapture esta pantalla y reporte en el foro de soporte.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                if (Directory.Exists(Path.GetDirectoryName(this.textBoxZipFile.Text)))
+                    folderBrowserDialog.SelectedPath = Path.GetDirectoryName(this.textBoxZipFile.Text);
+                if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
+                    this.textBoxOutputPath.Text = folderBrowserDialog.SelectedPath;
             }
         }
 
