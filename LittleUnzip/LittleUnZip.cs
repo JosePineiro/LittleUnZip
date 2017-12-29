@@ -256,9 +256,10 @@ namespace System.IO.Compression
 
                 output = new FileStream(outPathFilename, FileMode.Create, FileAccess.Write);
                 if (!ExtractFile(zfe, output))
-                        return false;
+                    return false;
 
                 //Change file datetimes
+                output.Close();
                 while (IsFileLocked(outPathFilename))
                     Application.DoEvents();
                 File.SetCreationTime(outPathFilename, zfe.modifyTime);
