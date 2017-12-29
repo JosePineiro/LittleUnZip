@@ -15,6 +15,12 @@ using (LittleUnZip zip = LittleUnZip("file.zip"))
     zip.Extract("c:\\directory", true);
 ```
 
+Extract "test.txt" of a ZIP file into "C:\\extract\\test.txt".
+```C#
+using (LittleUnZip zip = LittleUnZip("file.zip"))
+    zip.ExtractFile("test.txt", "C:\\extract\\test.txt");
+```
+
 Extract the second file of a ZIP file into the physical file.
 ```C#
 using (LittleUnZip zip = LittleUnZip("file.zip"))
@@ -63,3 +69,4 @@ LittleUnZip can not:
 - Decompress a large zip ( > 2.147.483.647 bytes)
 - Decompress other metods than Storage and Deflate
 - Create ZIP file. Use LittleZip class.
+- Descompress Split Zip files.
