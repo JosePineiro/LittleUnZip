@@ -90,7 +90,6 @@ namespace LittleUnzip
                 MessageBox.Show("Zip file integrity OK. Tested in " + sw.Elapsed + "ms.");
             else
                 MessageBox.Show("Zip file integrity FAIL. Tested in " + sw.Elapsed + "ms.");
-
         }
 
         private void buttonZipInfo_Click(object sender, EventArgs e)
