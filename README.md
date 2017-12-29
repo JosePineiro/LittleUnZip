@@ -62,4 +62,4 @@ LittleUnZip can:
 LittleUnZip can not:
 - Decompress a large zip ( > 2.147.483.647 bytes)
 - Decompress other metods than Storage and Deflate
-- Create ZIP file. Use LittleZip class.
+- Create ZIP file. Use https://github.com/JosePineiro/LittleZip class.
