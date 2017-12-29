@@ -371,6 +371,25 @@ namespace System.IO.Compression
         }
 
         /// <summary>
+        /// Copy the contents of a stored file into an opened stream
+        /// </summary>
+        /// <param name="zipFilename">Name in ZIP to extract</param>
+        /// <param name="outPathFilename">Name of file to store uncompressed data</param>
+        /// <returns>True if success, false if not.</returns>
+        /// <remarks>Unique decompression methods are Store and Deflate</remarks>
+        public bool ExtractFile(string zipFilename, string outPathFilename)
+        {
+            try
+            {
+                List<ZipFileEntry> entry = zipFileEntrys.FindAll(name => name.filename == zipFilename);
+                ZipFileEntry _zfe = entry[0];
+
+                return ExtractFile(_zfe, outPathFilename);
+            }
+            catch (Exception ex) { throw new Exception(ex.Message + "\r\nIn ZipExtract.ExtractFile"); }
+        }
+
+        /// <summary>
         /// Test the contents of a stored file
         /// </summary>
         /// <param name="zfe">Entry information of file to extract</param>
