@@ -6,24 +6,24 @@ The code is full comented and include simple example for using the class.
 ## Uncompress file functions:
 Open an existing ZIP file for extract, test or get info.
 ```C#
-LittleUnZip zip = LittleUnZip("c:\\directory\\file.zip");
+LittleUnZip zip = new LittleUnZip("c:\\directory\\file.zip");
 ```
 
 Extract full contents of a ZIP file into the output folder. Optionally you can put a progress bar.
 ```C#
-using (LittleUnZip zip = LittleUnZip("file.zip"))
+using (LittleUnZip zip = new LittleUnZip("file.zip"))
     zip.Extract("c:\\directory", true);
 ```
 
 Extract "test.txt" of a ZIP file into "C:\\extract\\test.txt".
 ```C#
-using (LittleUnZip zip = LittleUnZip("file.zip"))
+using (LittleUnZip zip = new LittleUnZip("file.zip"))
     zip.ExtractFile("test.txt", "C:\\extract\\test.txt");
 ```
 
 Extract the second file of a ZIP file into the physical file.
 ```C#
-using (LittleUnZip zip = LittleUnZip("file.zip"))
+using (LittleUnZip zip = new LittleUnZip("file.zip"))
     zip.ExtractFile(zip.zipFileEntrys[1], "C:\\test\\" + zip.zipFileEntrys[1].filename);
 ```
 
@@ -36,7 +36,7 @@ zip.Close()
 Open an stream for extract or test files.
 ```C#
 using (Stream zipStream = new FileStream("file.zip", FileMode.Open, FileAccess.Read))
-    LittleUnZip zip = LittleUnZip(zipStream);
+    LittleUnZip zip = new LittleUnZip(zipStream);
 ```
 
 Extract the second file of a ZIP file into one stream.
@@ -44,7 +44,7 @@ Extract the second file of a ZIP file into one stream.
 string outPathFilename = "C:\\test\\" + zip.zipFileEntrys[1].filename;
 
 using (Stream output = new FileStream(outPathFilename, FileMode.Create, FileAccess.Write))
-using (LittleUnZip zip = LittleUnZip("file.zip"))
+using (LittleUnZip zip = new LittleUnZip("file.zip"))
     zip.ExtractFile(zip.zipFileEntrys[1], output);
 ```
 
@@ -53,7 +53,7 @@ Extract the "test.txt" file of a ZIP file into one stream.
 string outPathFilename = "C:\\test\\test.txt";
 
 using (Stream output = new FileStream(outPathFilename, FileMode.Create, FileAccess.Write))
-using (LittleUnZip zip = LittleUnZip("file.zip"))
+using (LittleUnZip zip = new LittleUnZip("file.zip"))
     zip.ExtractFile("test.txt", output);
 ```
 
