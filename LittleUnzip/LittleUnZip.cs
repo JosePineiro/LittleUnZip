@@ -588,7 +588,7 @@ namespace System.IO.Compression
         /// <summary>Check if the file is locked</summary>
         /// <param name="pathFileName">File to check</param>
         /// <returns>True if the file is locked</returns>
-        private bool IsFileLocked(string pathFileName)
+        private static bool IsFileLocked(string pathFileName)
         {
             try
             {
@@ -599,7 +599,9 @@ namespace System.IO.Compression
                 }
 
                 //if can open, not is blocked
-                using (File.Open(pathFileName, FileMode.Open, FileAccess.Write, FileShare.None)) { }
+                FileStream myFile = File.Open(pathFileName, FileMode.Open, FileAccess.Write, FileShare.None);
+                myFile.Close();
+
                 return false;
             }
             catch
@@ -625,7 +627,10 @@ namespace System.IO.Compression
                 uint res = i;
                 for (int t = 0; t < 16; t++)
                 {
-                    for (int k = 0; k < 8; k++) res = (res & 1) == 1 ? Poly ^ (res >> 1) : (res >> 1);
+                    for (int k = 0; k < 8; k++)
+                    {
+                        res = (res & 1) == 1 ? Poly ^ (res >> 1) : (res >> 1);
+                    }
                     table[(t * 256) + i] = res;
                 }
             }
@@ -672,7 +677,9 @@ namespace System.IO.Compression
 
             //Process remain bytes
             while (--length >= 0)
+            {
                 crc32 = table[(crc32 ^ data[offset++]) & 0xff] ^ crc32 >> 8;
+            }
 
             //return result
             return crc32;
