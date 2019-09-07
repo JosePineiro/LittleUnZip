@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Windows.Forms;
+using System.Text;
 
 namespace LittleUnzip
 {
@@ -90,18 +91,19 @@ namespace LittleUnzip
 
         private void buttonZipInfo_Click(object sender, EventArgs e)
         {
-            string zipInformation = "";
-
+            StringBuilder zipInformation = new StringBuilder();
             using (LittleUnZip zip = new LittleUnZip(this.textBoxZipFile.Text))
                 foreach (LittleUnZip.ZipFileEntry zfe in zip.zipFileEntrys)
-                    zipInformation = zipInformation +
-                        "Filename: " + zfe.ToString() + ", " +
-                        "File size: " + zfe.fileSize + ", " +
-                        "Compresed size: " + zfe.compressedSize + ", " +
-                        "Metod: " + zfe.method.ToString() + ", " +
-                        "Comment: " + zfe.comment + "\r\n";
+                {
+                    zipInformation.Append("Filename: ").Append(zfe.filename);
+                    zipInformation.Append(" File size: ").Append(zfe.fileSize);
+                    zipInformation.Append(" Compresed size: ").Append(zfe.compressedSize);
+                    zipInformation.Append(" Metod: ").Append(zfe.method);
+                    zipInformation.Append(" Comment: ").Append(zfe.comment);
+                    zipInformation.Append("\r\n");
+                }
             
-            MessageBox.Show(zipInformation, Path.GetFileNameWithoutExtension(this.textBoxZipFile.Text), MessageBoxButtons.OK);
+            MessageBox.Show(zipInformation.ToString(), Path.GetFileNameWithoutExtension(this.textBoxZipFile.Text), MessageBoxButtons.OK);
         }
     }
 }
