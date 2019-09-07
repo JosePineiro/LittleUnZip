@@ -116,7 +116,7 @@ namespace System.IO.Compression
         #region Private fields
         private Stream zipFileStream;           // Stream object of storage file
         private string zipFileName;             // Stream object of storage file
-        private ushort zipFiles = 0;            // number of files in zip
+        private ushort zipFiles;            // number of files in zip
         #endregion
 
         #region | Constructors |
@@ -179,7 +179,6 @@ namespace System.IO.Compression
                 this.zipFileStream.Dispose();
                 this.zipFileStream = null;
             }
-            GC.SuppressFinalize(this);
         }
         #endregion
 
@@ -273,6 +272,7 @@ namespace System.IO.Compression
 
                 //Delete file to create
                 if (File.Exists(outPathFilename))
+                {
                     try
                     {
                         File.Delete(outPathFilename);
@@ -281,6 +281,7 @@ namespace System.IO.Compression
                     {
                         throw new InvalidOperationException("File '" + outPathFilename + "' cannot be written");
                     }
+                }
 
                 output = new FileStream(outPathFilename, FileMode.Create, FileAccess.Write);
                 if (!ExtractFile(zfe, output))
@@ -291,7 +292,9 @@ namespace System.IO.Compression
                 //Change file datetimes
                 output.Close();
                 while (IsFileLocked(outPathFilename))
+                {
                     Application.DoEvents();
+                }
                 File.SetCreationTime(outPathFilename, zfe.modifyTime);
                 File.SetLastWriteTime(outPathFilename, zfe.modifyTime);
 
@@ -471,7 +474,7 @@ namespace System.IO.Compression
                 5-10 Minute (0–59) 
                 11-15 Hour (0–23 on a 24-hour clock) 
         */
-        private DateTime DosTimeToDateTime(uint _dt)
+        private static DateTime DosTimeToDateTime(uint _dt)
         {
             return new DateTime(
                 (int)(_dt >> 25) + 1980,
@@ -547,7 +550,8 @@ namespace System.IO.Compression
                    extra field (variable size)
                    file comment (variable size)
                 */
-                for (int pointer = 0; pointer < centralDirImage.Length; )
+                int pointer = 0;
+                while (pointer < centralDirImage.Length)
                 {
                     uint signature = BitConverter.ToUInt32(centralDirImage, pointer);
                     if (signature != 0x02014b50)
@@ -617,7 +621,7 @@ namespace System.IO.Compression
         /// <summary>
         /// Generate CRC32 table
         /// </summary>
-        private void PrecalcCRC()
+        private static void PrecalcCRC()
         {
             const uint Poly = 0xedb88320u;
 
